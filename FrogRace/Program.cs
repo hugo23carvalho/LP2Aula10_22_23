@@ -3,10 +3,17 @@ using System.Threading;
 
 namespace FrogRace
 {
-    class Program
+    public class Program
     {
+        private static int finisher;
+
+        private static object threadLock;
          private static void Main(string[] args)
         {
+            threadLock = new object();
+            finisher = 0;
+
+
             Thread t1 = new Thread (FrogRace);
             Thread t2 = new Thread (FrogRace);
             Thread t3 = new Thread (FrogRace);
@@ -37,6 +44,16 @@ namespace FrogRace
             }
 
             Console.WriteLine($"Rã{FrogNumb} acabou!");
+            
+            lock (threadLock)
+            {
+                if(finisher == 0)
+                {
+                    Console.WriteLine($"Rã {FrogNumb} ganhou!");
+                }
+
+                finisher ++;
+            }
         }
     }
 }
